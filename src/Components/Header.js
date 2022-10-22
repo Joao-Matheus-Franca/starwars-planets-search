@@ -12,6 +12,14 @@ function Header() {
 
   const [state, setState] = useState(INITIAL_STATE);
 
+  const type = ['population',
+    'orbital_period',
+    'diameter',
+    'rotation_period',
+    'surface_water'];
+
+  const [types, setType] = useState(type);
+
   return (
     <form>
       <input
@@ -24,11 +32,7 @@ function Header() {
         value={ state.type }
         onChange={ ({ target: { value } }) => setState({ ...state, type: value }) }
       >
-        <option>population</option>
-        <option>orbital_period</option>
-        <option>diameter</option>
-        <option>rotation_period</option>
-        <option>surface_water</option>
+        {types.map((t) => (<option key={ t }>{ t }</option>))}
       </select>
       <select
         data-testid="comparison-filter"
@@ -48,7 +52,11 @@ function Header() {
       <button
         data-testid="button-filter"
         type="button"
-        onClick={ () => filterNumber(state.type, state.comparison, state.value) }
+        onClick={ () => {
+          filterNumber(state.type, state.comparison, state.value);
+          setState({ ...state, type: types.filter((t) => t !== state.type)[0] });
+          setType(types.filter((t) => t !== state.type));
+        } }
       >
         Filtrar
       </button>
