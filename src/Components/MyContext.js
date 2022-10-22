@@ -26,16 +26,30 @@ function Provider({ children }) {
 
   useEffect(() => { fetchAPI(); }, []);
 
-  const value = useMemo(() => ({
+  const context = useMemo(() => ({
     planets,
     renderPlanets,
     filterName: (text) => {
       filterPlanets(planets.filter((p) => p.name.includes(text)));
     },
+    filterNumber: (type, comparison, value) => {
+      filterPlanets(planets.filter((p) => {
+        if (comparison === 'maior que') {
+          return Number(p[type]) > Number(value);
+        }
+        if (comparison === 'menor que') {
+          return Number(p[type]) < Number(value);
+        }
+        if (comparison === 'igual a') {
+          return Number(p[type]) === Number(value);
+        }
+        return p;
+      }));
+    },
   }), [planets, renderPlanets]);
 
   return (
-    <MyContext.Provider value={ value }>
+    <MyContext.Provider value={ context }>
       {children}
     </MyContext.Provider>
   );
