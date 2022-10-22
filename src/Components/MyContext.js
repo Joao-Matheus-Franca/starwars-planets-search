@@ -1,14 +1,14 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 
 export const MyContext = createContext();
 
 function Provider({ children }) {
-  const INITIAL_STATE = {
-    planets: [],
-  };
+  const INITIAL_STATE = [];
 
   const [planets, addPlanets] = useState(INITIAL_STATE);
+
+  const [renderPlanets, filterPlanets] = useState(INITIAL_STATE);
 
   const fetchAPI = async () => {
     const ENDPOINT = 'https://swapi.dev/api/planets';
@@ -19,14 +19,23 @@ function Provider({ children }) {
       delete p.residents;
       return p;
     });
-    addPlanets({ planets: await finalResults });
+    addPlanets(await finalResults);
+    filterPlanets(await finalResults);
     return data;
   };
 
   useEffect(() => { fetchAPI(); }, []);
 
+  const value = useMemo(() => ({
+    planets,
+    renderPlanets,
+    filterName: (text) => {
+      filterPlanets(planets.filter((p) => p.name.includes(text)));
+    },
+  }), [planets, renderPlanets]);
+
   return (
-    <MyContext.Provider value={ planets }>
+    <MyContext.Provider value={ value }>
       {children}
     </MyContext.Provider>
   );
