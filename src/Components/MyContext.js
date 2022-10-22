@@ -33,7 +33,7 @@ function Provider({ children }) {
       filterPlanets(planets.filter((p) => p.name.includes(text)));
     },
     filterNumber: (type, comparison, value) => {
-      filterPlanets(planets.filter((p) => {
+      filterPlanets(renderPlanets.filter((p) => {
         if (comparison === 'maior que') {
           return Number(p[type]) > Number(value);
         }
