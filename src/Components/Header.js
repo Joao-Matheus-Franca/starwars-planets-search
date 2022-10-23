@@ -2,7 +2,10 @@ import { useContext, useState } from 'react';
 import { MyContext } from './MyContext';
 
 function Header() {
-  const { filterName, filterNumber } = useContext(MyContext);
+  const {
+    setFilters,
+    setName,
+  } = useContext(MyContext);
 
   const INITIAL_STATE = {
     type: 'population',
@@ -20,12 +23,14 @@ function Header() {
 
   const [types, setType] = useState(type);
 
+  const [renderFilter, setFilter] = useState([]);
+
   return (
     <form>
       <input
         type="text"
         data-testid="name-filter"
-        onChange={ ({ target: { value } }) => filterName(value) }
+        onChange={ ({ target: { value } }) => setName(value) }
       />
       <select
         data-testid="column-filter"
@@ -53,12 +58,47 @@ function Header() {
         data-testid="button-filter"
         type="button"
         onClick={ () => {
-          filterNumber(state.type, state.comparison, state.value);
+          setFilter([...renderFilter, { ...state }]);
+          setFilters([...renderFilter, { ...state }]);
           setState({ ...state, type: types.filter((t) => t !== state.type)[0] });
           setType(types.filter((t) => t !== state.type));
         } }
       >
         Filtrar
+      </button>
+      { renderFilter.map((r) => (
+        <div
+          key={ r.type }
+          data-testid="filter"
+        >
+          <h4>
+            {r.type}
+            {' '}
+            {r.comparison}
+            {' '}
+            {r.value}
+          </h4>
+          <button
+            id={ r.type }
+            type="button"
+            onClick={ ({ target: { id } }) => {
+              setFilter(renderFilter.filter((f) => f.type !== id));
+              setFilters(renderFilter.filter((f) => f.type !== id));
+            } }
+          >
+            Excluir filtro
+          </button>
+        </div>
+      )) }
+      <button
+        type="button"
+        data-testid="button-remove-filters"
+        onClick={ () => {
+          setFilter([]);
+          setFilters([]);
+        } }
+      >
+        Remover filtros
       </button>
     </form>
   );

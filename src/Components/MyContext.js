@@ -8,7 +8,9 @@ function Provider({ children }) {
 
   const [planets, addPlanets] = useState(INITIAL_STATE);
 
-  const [renderPlanets, filterPlanets] = useState(INITIAL_STATE);
+  const [nameFilter, setName] = useState('');
+
+  const [filters, setFilters] = useState([]);
 
   const fetchAPI = async () => {
     const ENDPOINT = 'https://swapi.dev/api/planets';
@@ -20,7 +22,6 @@ function Provider({ children }) {
       return p;
     });
     addPlanets(await finalResults);
-    filterPlanets(await finalResults);
     return data;
   };
 
@@ -28,25 +29,11 @@ function Provider({ children }) {
 
   const context = useMemo(() => ({
     planets,
-    renderPlanets,
-    filterName: (text) => {
-      filterPlanets(planets.filter((p) => p.name.includes(text)));
-    },
-    filterNumber: (type, comparison, value) => {
-      filterPlanets(renderPlanets.filter((p) => {
-        if (comparison === 'maior que') {
-          return Number(p[type]) > Number(value);
-        }
-        if (comparison === 'menor que') {
-          return Number(p[type]) < Number(value);
-        }
-        if (comparison === 'igual a') {
-          return Number(p[type]) === Number(value);
-        }
-        return p;
-      }));
-    },
-  }), [planets, renderPlanets]);
+    filters,
+    nameFilter,
+    setFilters,
+    setName,
+  }), [planets, nameFilter, filters]);
 
   return (
     <MyContext.Provider value={ context }>
