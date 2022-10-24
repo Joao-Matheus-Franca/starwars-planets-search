@@ -79,6 +79,7 @@ function Table() {
       }
       return p;
     });
+  console.log(planets);
   return (
     <table>
       <thead>
@@ -100,7 +101,10 @@ function Table() {
       </thead>
       <tbody>
         {filteredPlanets.filter((p) => p.name.includes(nameFilter)).map((p) => (
-          <tr key={ p.name }>
+          <tr
+            key={ p.name }
+            data-testid="table-line"
+          >
             <td>{ p.name }</td>
             <td>{ p.rotation_period }</td>
             <td>{ p.orbital_period}</td>
