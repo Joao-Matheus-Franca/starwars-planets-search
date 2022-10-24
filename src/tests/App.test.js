@@ -136,15 +136,39 @@ describe('Testes da aplicação', () => {
     expect(newFilterLine).not.toBeInTheDocument()
 
   });
-  test('Testando a presença dos elementos no componente Table', () => {
+  test('Testando os filtros afetando o componente Table', () => {
     render(
       <MyContext.Provider value={{ planets: mockContext.planets, 
       nameFilter: mockContext.nameFilter, filters: mockContext.filters }}>
         <Table />
       </MyContext.Provider>
       );
-
-    
+  })
+  test('Testando os filtros afetando o componente Table', () => {
+    render(
+      <MyContext.Provider value={{ planets: mockContext.planets, 
+      nameFilter: mockContext.nameFilter, filters: [{ type: 'population', comparison: 'igual a', value: '0'},
+      { type: 'orbital_period', comparison: 'igual a', value: '0'},
+      { type: 'diameter', comparison: 'igual a', value: '0'},
+      { type: 'rotation_period', comparison: 'igual a', value: '0'},
+      { type: 'surface_water', comparison: 'igual a', value: '0'}],
+    } }>
+        <Table />
+      </MyContext.Provider>
+      );
+  })
+  test('Testando os filtros afetando o componente Table', () => {
+    render(
+      <MyContext.Provider value={{ planets: mockContext.planets, 
+      nameFilter: mockContext.nameFilter, filters: [{ type: 'population', comparison: 'menor que', value: '1000000000000'},
+      { type: 'orbital_period', comparison: 'menor que', value: '1000'},
+      { type: 'diameter', comparison: 'menor que', value: '10000'},
+      { type: 'rotation_period', comparison: 'menor que', value: '1000'},
+      { type: 'surface_water', comparison: 'menor que', value: '1000'}],
+    } }>
+        <Table />
+      </MyContext.Provider>
+      );
   })
 })
 
