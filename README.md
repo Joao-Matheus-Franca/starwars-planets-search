@@ -1,1 +1,1 @@
-# 🪐 Starwars Planets Search 🪐 #
+# 🪐 Star Wars Planets Search 🪐 #
